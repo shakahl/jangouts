@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "dompurify": "^1.0.11",
+    "embed-js": "^5.0.4",
+    "embed-preset-basic": "^5.0.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-grid-layout": "^0.16.6",
