@@ -7,27 +7,43 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestRenderer from 'react-test-renderer';
+import TestRenderer, { act } from 'react-test-renderer';
 
 import LoginForm from './LoginForm';
 
+jest.mock('react-redux', () => {
+  return {
+    useDispatch: () => {}
+  };
+});
+
+jest.mock('../../janus-api', () => {
+  return {
+    getRooms: () => Promise.resolve([{ id: '1st room' }])
+  };
+});
+
 describe('LoginForm component', () => {
-  it('renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<LoginForm />, div);
-    ReactDOM.unmountComponentAtNode(div);
+  let container;
+
+  beforeEach(() => {
+    act(() => {
+      container = TestRenderer.create(<LoginForm />);
+    });
+  });
+
+  afterEach(() => {
+    container = null;
   });
 
   it('has an input to enter the username', () => {
-    const testRenderer = TestRenderer.create(<LoginForm />);
-    const inputs = testRenderer.root.findAllByType('input');
+    const inputs = container.root.findAllByType('input');
 
     expect(inputs.map((input) => input.props.name)).toContain('username');
   });
 
   it('has a selector to choose the room', () => {
-    const testRenderer = TestRenderer.create(<LoginForm />);
-    const selector = testRenderer.root.findByType('select');
+    const selector = container.root.findByType('select');
 
     expect(selector.props.name).toBe('room');
   });
